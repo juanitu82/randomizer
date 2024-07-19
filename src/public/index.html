@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Película</title>
+    <style>
+        .movie-container {
+            text-align: center;
+            margin: 20px;
+        }
+        .movie-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .movie-image {
+            max-width: 100%;
+            height: auto;
+        }
+        .movie-details {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="movie-container" class="movie-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('/api/peliculas/create');
+                const movie = await response.json();
+                
+                const container = document.getElementById('movie-container');
+                
+                const titleElement = document.createElement('h1');
+                titleElement.className = 'movie-title';
+                titleElement.textContent = movie.title;
+
+                const imageElement = document.createElement('img');
+                imageElement.className = 'movie-image';
+                imageElement.src = movie.link;
+                imageElement.alt = movie.title;
+
+                const detailsElement = document.createElement('div');
+                detailsElement.className = 'movie-details';
+                detailsElement.textContent = `${movie.genre} | ${movie.year}`;
+
+                const buttonElement = document.createElement('a');
+                buttonElement.href = movie.link;
+                buttonElement.textContent = 'Ver Imagen';
+                buttonElement.className = 'button';
+
+                container.appendChild(titleElement);
+                container.appendChild(imageElement);
+                container.appendChild(detailsElement);
+                container.appendChild(buttonElement);
+            } catch (error) {
+                console.error('Error fetching movie data:', error);
+            }
+        });
+    </script>
+</body>
+</html>
